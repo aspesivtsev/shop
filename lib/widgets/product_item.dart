@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 
 class ProductItem extends StatelessWidget {
-  const ProductItem({Key? key}) : super(key: key);
+  //const ProductItem({Key? key}) : super(key: key);
+  final String id;
+  final String title;
+  final String imageUrl;
+  ProductItem(this.id, this.title, this.imageUrl);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: null,
-    );
+    return GridTile(child: Image.network(imageUrl));
   }
 }
