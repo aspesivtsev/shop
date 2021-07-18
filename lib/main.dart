@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '';
+import './screens/product_detail_screen.dart';
 
 import './screens/products_overview_screen.dart';
 import './providers/products.dart';
@@ -15,16 +15,19 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     //ChangeNotifierProvider gives content for rebuilding and updating only listeners
     return ChangeNotifierProvider(
+      // in previous versions you should use "builder" method instead of "create"
       create: (ctx) => Products(),
       child: MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          primarySwatch: Colors.lightGreen,
-          accentColor: Colors.deepOrange,
-          fontFamily: 'Lato',
-        ),
-        home: ProductsOverviewScreen(),
-      ),
+          title: 'Flutter Demo',
+          theme: ThemeData(
+            primarySwatch: Colors.lightGreen,
+            accentColor: Colors.deepOrange,
+            fontFamily: 'Lato',
+          ),
+          home: ProductsOverviewScreen(),
+          routes: {
+            ProductDetailScreen.routeName: (ctx) => ProductDetailScreen(),
+          }),
     );
   }
 }
