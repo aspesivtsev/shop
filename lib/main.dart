@@ -14,9 +14,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //ChangeNotifierProvider gives content for rebuilding and updating only listeners
-    return ChangeNotifierProvider(
-      // in previous versions you should use "builder" method instead of "create"
-      create: (ctx) => Products(),
+    // in previous versions you should use "builder" method instead of "create"
+    //see products_grid.dart file for the example without .value
+    ///return ChangeNotifierProvider(
+    ///create: (ctx) => Products(),
+    return ChangeNotifierProvider.value(
+      value: Products(),
       child: MaterialApp(
           title: 'Flutter Demo',
           theme: ThemeData(
