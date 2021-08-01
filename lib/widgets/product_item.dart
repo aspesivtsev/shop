@@ -14,7 +14,7 @@ class ProductItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //you can use Provider.of<Product>(context) or Consumer<Product>...
-    //here we use both (provider.of is used to get variables) and (consumer is to rebuild the specific part)
+    //here we use both (provider.of is used to get variables) and (consumer to rebuild the specific part)
     final product = Provider.of<Product>(context);
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),

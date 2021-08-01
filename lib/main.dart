@@ -18,6 +18,8 @@ class MyApp extends StatelessWidget {
     //see products_grid.dart file for the example without .value
     ///return ChangeNotifierProvider(
     ///create: (ctx) => Products(),
+    ///с верхним вариантом не работает, появляется ошибка "A Product was used after being disposed."
+    ///поэтому нужен вариант с .value
     return ChangeNotifierProvider.value(
       value: Products(),
       child: MaterialApp(
