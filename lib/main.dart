@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import './screens/product_detail_screen.dart';
 
+import './screens/product_detail_screen.dart';
 import './screens/products_overview_screen.dart';
+
+import './providers/cart.dart';
 import './providers/products.dart';
 
 void main() {
@@ -15,14 +17,24 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     //ChangeNotifierProvider gives content for rebuilding and updating only listeners
     // in previous versions you should use "builder" method instead of "create"
-    //see products_grid.dart file for the example without .value
+    //see products_grid.dart file for the example with .value
     ///return ChangeNotifierProvider(
-    ///create: (ctx) => Products(),
-    ///с верхним вариантом не работает, появляется ошибка "A Product was used after being disposed."
-    ///поэтому нужен вариант с .value
-    return ChangeNotifierProvider.value(
-      value: Products(),
-      child: MaterialApp(
+    ///create: (ctx) => Products()),
+    ///с верхним вариантом если не работает и появляется ошибка "A Product was used after being disposed."
+    ///тогда нужно использовать вариант с .value
+    ///ChangeNotifierProvider.value(
+    ///value: Products()),
+    return MultiProvider(
+        //MultiProvider дает возможность использовать несколько провайдеров в одном глобальном контексте
+        providers: [
+          ChangeNotifierProvider(
+            create: (ctx) => Products(),
+          ),
+          ChangeNotifierProvider.value(
+            value: Cart(),
+          ),
+        ],
+        child: MaterialApp(
           title: 'Flutter Demo',
           theme: ThemeData(
             primarySwatch: Colors.lightGreen,
@@ -32,8 +44,8 @@ class MyApp extends StatelessWidget {
           home: ProductsOverviewScreen(),
           routes: {
             ProductDetailScreen.routeName: (ctx) => ProductDetailScreen(),
-          }),
-    );
+          },
+        ));
   }
 }
 
