@@ -14,14 +14,21 @@ class CartItem {
 }
 
 class Cart with ChangeNotifier {
-  late Map<String, CartItem> _items;
+  late Map<String, CartItem> _items = {};
 
   Map<String, CartItem> get items {
     return {..._items};
   }
 
   int get itemCount {
-    return _items.length;
+    print('HHHEEEEEEEYYYYYY-1!');
+    //print(_items.length);
+    print('HHHEEEEEEEYYYYYY-2!');
+    //return 2;
+    //
+    //if (_items.length == {}){return 0;} else {return _items.length;}
+
+    return _items.length == 0 ? 0 : _items.length;
   }
 
   void addItem(
@@ -48,5 +55,7 @@ class Cart with ChangeNotifier {
               quantity: 1,
               price: price));
     }
+
+    notifyListeners();
   }
 }

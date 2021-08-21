@@ -18,7 +18,6 @@ class MyApp extends StatelessWidget {
     //ChangeNotifierProvider gives content for rebuilding and updating only listeners
     // in previous versions you should use "builder" method instead of "create"
     //see products_grid.dart file for the example with .value
-    ///return ChangeNotifierProvider(
     ///create: (ctx) => Products()),
     ///с верхним вариантом если не работает и появляется ошибка "A Product was used after being disposed."
     ///тогда нужно использовать вариант с .value
