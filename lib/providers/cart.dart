@@ -14,6 +14,7 @@ class CartItem {
 }
 
 class Cart with ChangeNotifier {
+  //in order to solve late initialization error i had to add empty init Map {}
   late Map<String, CartItem> _items = {};
 
   Map<String, CartItem> get items {
@@ -21,14 +22,16 @@ class Cart with ChangeNotifier {
   }
 
   int get itemCount {
-    print('HHHEEEEEEEYYYYYY-1!');
-    //print(_items.length);
-    print('HHHEEEEEEEYYYYYY-2!');
-    //return 2;
-    //
-    //if (_items.length == {}){return 0;} else {return _items.length;}
+    //return _items.length == 0 ? 0 : _items.length;
+    return _items.length;
+  }
 
-    return _items.length == 0 ? 0 : _items.length;
+  double get totalAmount {
+    var total = 0.0;
+    _items.forEach((key, cartItem) {
+      total += cartItem.price * cartItem.quantity;
+    });
+    return total;
   }
 
   void addItem(
