@@ -21,6 +21,7 @@ class CartItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dismissible(
       key: ValueKey(id),
+      ///направление сдвига справа налево
       direction: DismissDirection.endToStart,
       onDismissed: (direction) {
         Provider.of<Cart>(context, listen: false).removeItem(productId);
