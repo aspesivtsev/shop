@@ -30,5 +30,6 @@ class Orders with ChangeNotifier {
             amount: total,
             products: cartProducts,
             dateTime: DateTime.now()));
+    notifyListeners();
   }
 }

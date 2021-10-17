@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 ///imprting only Cart class here to avoid coalisions of CartItem class
 ///which is present in both cart.dart and cart_item.dart.
 import '../providers/cart.dart' show Cart;
-
+import '../providers/orders.dart';
 import '../widgets/cart_item.dart';
 
 class CartScreen extends StatelessWidget {
@@ -38,7 +38,13 @@ class CartScreen extends StatelessWidget {
                   label: Text('\$${cart.totalAmount.toStringAsFixed(2)}'),
                   backgroundColor: Theme.of(context).primaryColor,
                 ),
-                TextButton(onPressed: () {}, child: const Text('ORDER NOW')),
+                TextButton(
+                    onPressed: () {
+                      Provider.of<Orders>(context, listen: false).addOrder(
+                          cart.items.values.toList(), cart.totalAmount);
+                      cart.clear();
+                    },
+                    child: const Text('ORDER NOW')),
               ],
             ),
           ),
