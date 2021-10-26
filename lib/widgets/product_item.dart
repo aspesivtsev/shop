@@ -57,6 +57,10 @@ class ProductItem extends StatelessWidget {
             ),
             onPressed: () {
               cart.addItem(product.id, product.price, product.title);
+
+              ///если мы вызываем несколько снэков подряд, то один снэк будет ждать пока закроется предыдущий
+              ///и только тогда показываться, но это можно переопределить используя hideCurrentSnackBar()
+              ScaffoldMessenger.of(context).hideCurrentSnackBar();
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text(
                   'Added item to cart!',
@@ -65,7 +69,9 @@ class ProductItem extends StatelessWidget {
                 duration: Duration(seconds: 2),
                 action: SnackBarAction(
                   label: 'UNDO',
-                  onPressed: () {},
+                  onPressed: () {
+                    cart.removerSingleItem(product.id);
+                  },
                 ),
               ));
             },
