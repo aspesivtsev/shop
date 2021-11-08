@@ -15,6 +15,9 @@ class _EditProductScreenState extends State<EditProductScreen> {
   //контроллер рисунка в форме
   final _imageUrlController = TextEditingController();
 
+  ///тут мы добавляем listener который будет слушать изменения фокуса в Image URL
+  ///и если изменения наступили он будет запускать определенную функцию
+  ///в данном случае _updateImageUrl
   @override
   void initState() {
     _imageUrlFocusNode.addListener(_updateImageUrl);
@@ -33,17 +36,27 @@ class _EditProductScreenState extends State<EditProductScreen> {
     super.dispose();
   }
 
+  ///тут мы вызываем апдейт интерфейса чтобы прорисовать загруженную картинку
+  ///в превью в моменте перевода фокуса
   void _updateImageUrl() {
     if (!_imageUrlFocusNode.hasFocus) {
       setState(() {});
     }
   }
 
+  void _saveForm() {}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Edit Product'),
+        actions: <Widget>[
+          IconButton(
+            onPressed: _saveForm,
+            icon: Icon(Icons.save),
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -108,6 +121,13 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       textInputAction: TextInputAction.done,
                       controller: _imageUrlController,
                       focusNode: _imageUrlFocusNode,
+
+                      ///при нажатии на кнопку done на софтварной клавиатуре
+                      onFieldSubmitted: (_) {
+                        _saveForm();
+                      },
+
+                      ///перерисовываем UI
                       onEditingComplete: () {
                         setState(() {});
                       },
