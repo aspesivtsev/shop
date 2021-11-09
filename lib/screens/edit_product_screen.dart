@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../providers/product.dart';
 
 class EditProductScreen extends StatefulWidget {
   static const routeName = '/edit-product';
@@ -11,6 +12,11 @@ class _EditProductScreenState extends State<EditProductScreen> {
   final _priceFocusNode = FocusNode();
   final _descriptionFocusNode = FocusNode();
   final _imageUrlFocusNode = FocusNode();
+  var _editedProduct =
+      Product(id: '', title: '', description: '', price: 0, imageUrl: '');
+
+  ///глобальный ключ для работы с формой
+  final _form = GlobalKey<FormState>();
 
   //контроллер рисунка в форме
   final _imageUrlController = TextEditingController();
@@ -44,7 +50,9 @@ class _EditProductScreenState extends State<EditProductScreen> {
     }
   }
 
-  void _saveForm() {}
+  void _saveForm() {
+    _form.currentState!.save();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,6 +69,9 @@ class _EditProductScreenState extends State<EditProductScreen> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
+          key: _form,
+
+          ///подключение данной формы к глобальному ключу
           child: ListView(
             children: <Widget>[
               TextFormField(
