@@ -52,6 +52,11 @@ class _EditProductScreenState extends State<EditProductScreen> {
 
   void _saveForm() {
     _form.currentState!.save();
+    //print(_editedProduct.id);
+    print(_editedProduct.title);
+    print(_editedProduct.description);
+    print(_editedProduct.price);
+    print(_editedProduct.imageUrl);
   }
 
   @override
@@ -69,19 +74,31 @@ class _EditProductScreenState extends State<EditProductScreen> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
-          key: _form,
-
           ///подключение данной формы к глобальному ключу
+          key: _form,
           child: ListView(
             children: <Widget>[
               TextFormField(
                 decoration: InputDecoration(labelText: 'Title'),
                 textInputAction: TextInputAction.next,
                 autofocus: true,
+
+                ///при завершении редактирования и нажатии кнопки Далее/Next
+                ///передать фокус на указатель _priceFocusNode
                 onFieldSubmitted: (_) {
-                  ///при завершении редактирования и нажатии кнопки Далее/Next
-                  ///передать фокус на указатель _priceFocusNode
                   FocusScope.of(context).requestFocus(_priceFocusNode);
+                },
+
+                ///событие происходящее при сохранении формы.
+                ///value содержит значение, которое вводилось в поле формы
+                ///остальные поля остаются без изменения и берутся из объекта
+                onSaved: (value) {
+                  _editedProduct = Product(
+                      id: _editedProduct.id,
+                      title: value!,
+                      description: _editedProduct.description,
+                      price: _editedProduct.price,
+                      imageUrl: _editedProduct.imageUrl);
                 },
               ),
               TextFormField(
@@ -89,8 +106,9 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 textInputAction: TextInputAction.next,
 
                 ///клава с десятичными числами
-                ///keyboardType: TextInputType.numberWithOptions(decimal: true),
-                keyboardType: TextInputType.number,
+                keyboardType: TextInputType.numberWithOptions(decimal: true),
+
+                ///keyboardType: TextInputType.number,
 
                 ///показывает что это то поле, на которое нужно переводить фокус
                 ///при обращении к _priceFocusNode
@@ -100,12 +118,28 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   ///передать фокус на указатель _descriptionFocusNode
                   FocusScope.of(context).requestFocus(_descriptionFocusNode);
                 },
+                onSaved: (value) {
+                  _editedProduct = Product(
+                      id: _editedProduct.id,
+                      title: _editedProduct.title,
+                      description: _editedProduct.description,
+                      price: double.parse(value!),
+                      imageUrl: _editedProduct.imageUrl);
+                },
               ),
               TextFormField(
                 decoration: InputDecoration(labelText: 'Description'),
                 maxLines: 3,
                 keyboardType: TextInputType.multiline,
                 focusNode: _descriptionFocusNode,
+                onSaved: (value) {
+                  _editedProduct = Product(
+                      id: _editedProduct.id,
+                      title: _editedProduct.title,
+                      description: value!,
+                      price: _editedProduct.price,
+                      imageUrl: _editedProduct.imageUrl);
+                },
               ),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -141,6 +175,14 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       ///перерисовываем UI
                       onEditingComplete: () {
                         setState(() {});
+                      },
+                      onSaved: (value) {
+                        _editedProduct = Product(
+                            id: _editedProduct.id,
+                            title: _editedProduct.title,
+                            description: _editedProduct.description,
+                            price: _editedProduct.price,
+                            imageUrl: value!);
                       },
                     ),
                   )
