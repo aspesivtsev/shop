@@ -51,6 +51,13 @@ class _EditProductScreenState extends State<EditProductScreen> {
   }
 
   void _saveForm() {
+    ///запуск механизма валидации на форме. Если какой-то валидатор провалится, то в isValid попадет false
+    final isValid = _form.currentState!.validate();
+
+    ///если isValid не равняется true, то мы не сохраняем результат формы
+    if (!isValid) {
+      return;
+    }
     _form.currentState!.save();
     //print(_editedProduct.id);
     print(_editedProduct.title);
@@ -99,6 +106,16 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       description: _editedProduct.description,
                       price: _editedProduct.price,
                       imageUrl: _editedProduct.imageUrl);
+                },
+
+                ///в value попадает значение user input
+                ///return null значит ввод корректный
+                ///return 'Error message' значит вернуть ошибку с указанным текстом
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Please provide a value';
+                  }
+                  return null;
                 },
               ),
               TextFormField(
