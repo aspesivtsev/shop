@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../providers/product.dart';
+import '../providers/products.dart';
+import 'package:provider/provider.dart';
 
 class EditProductScreen extends StatefulWidget {
   static const routeName = '/edit-product';
@@ -46,6 +48,14 @@ class _EditProductScreenState extends State<EditProductScreen> {
   ///в превью в моменте перевода фокуса
   void _updateImageUrl() {
     if (!_imageUrlFocusNode.hasFocus) {
+      /// тут мы проверяем ряд условий для того, чтобы не отображать превью картинки, если адрес картинки не верный
+      if ((_imageUrlController.text.startsWith('http') &&
+              _imageUrlController.text.startsWith('https')) ||
+          (_imageUrlController.text.endsWith('.png') &&
+              _imageUrlController.text.endsWith('.jpg') &&
+              _imageUrlController.text.endsWith('.jpeg'))) {
+        return;
+      }
       setState(() {});
     }
   }
@@ -59,7 +69,10 @@ class _EditProductScreenState extends State<EditProductScreen> {
       return;
     }
     _form.currentState!.save();
-    //print(_editedProduct.id);
+    Provider.of<Products>(context, listen: false).addProduct(_editedProduct);
+    Navigator.of(context).pop();
+
+    print(_editedProduct.id);
     print(_editedProduct.title);
     print(_editedProduct.description);
     print(_editedProduct.price);
@@ -143,6 +156,18 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       price: double.parse(value!),
                       imageUrl: _editedProduct.imageUrl);
                 },
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Please enter a price';
+                  }
+                  if (double.tryParse(value) == null) {
+                    return 'Please enter a valid number';
+                  }
+                  if (double.parse(value) <= 0) {
+                    return 'Price cannot be 0';
+                  }
+                  return null;
+                },
               ),
               TextFormField(
                 decoration: InputDecoration(labelText: 'Description'),
@@ -156,6 +181,15 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       description: value!,
                       price: _editedProduct.price,
                       imageUrl: _editedProduct.imageUrl);
+                },
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Please provide a description';
+                  }
+                  if (value.length < 10) {
+                    return 'Should be at least 10 characters long';
+                  }
+                  return null;
                 },
               ),
               Row(
@@ -200,6 +234,21 @@ class _EditProductScreenState extends State<EditProductScreen> {
                             description: _editedProduct.description,
                             price: _editedProduct.price,
                             imageUrl: value!);
+                      },
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Please provide an image URL';
+                        }
+                        if (!value.startsWith('http') &&
+                            !value.startsWith('https')) {
+                          return 'Please enter valid URL';
+                        }
+                        if (!value.endsWith('.png') &&
+                            !value.endsWith('.jpg') &&
+                            !value.endsWith('.jpeg')) {
+                          return 'Please enter valid URL for a picture file';
+                        }
+                        return null;
                       },
                     ),
                   )
