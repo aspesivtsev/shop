@@ -47,9 +47,11 @@ class ProductItem extends StatelessWidget {
               },
             ),
           ),
-          title: Text(
-            product.title,
-            textAlign: TextAlign.center,
+          title: FittedBox(
+            child: Text(
+              product.title,
+              textAlign: TextAlign.center,
+            ),
           ),
           trailing: IconButton(
             icon: Icon(

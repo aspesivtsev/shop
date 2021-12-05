@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
 import './product.dart';
 
 class Products with ChangeNotifier {
@@ -65,6 +67,8 @@ class Products with ChangeNotifier {
   // }
 
   void addProduct(Product product) {
+    const url =
+        Uri.https('https://flutter-update.firebaseio.com/', 'products.json');
     final newProduct = Product(
         id: DateTime.now().toString(),
         title: product.title,
