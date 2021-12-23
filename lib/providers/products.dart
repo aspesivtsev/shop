@@ -67,21 +67,23 @@ class Products with ChangeNotifier {
   //   notifyListeners();
   // }
 
-//тут мы создаем Future вместо обычного void чтобы иметь возможность обращаться к возращаемому значению через .then()
-  Future<void> addProduct(Product product) {
+  ///тут мы создаем Future вместо обычного void чтобы иметь возможность обращаться
+  ///к возращаемому значению через .then()
+  Future<void> addProduct(Product product) async {
     final url = Uri.https(
-        'flutter-shop-test-app-default-rtdb.firebaseio.com', 'products.json');
-    return http
-        .post(url,
-            body: json.encode({
-              //'id': product.id,
-              'title': product.title,
-              'description': product.description,
-              'price': product.price,
-              'imageUrl': product.imageUrl,
-              'isFavorite': product.isFavorite,
-            }))
-        .then((response) {
+        'flutter-shop-test-app-default-rtdb.firebaseio.com', 'products');
+    try {
+      final response = await http.post(
+        url,
+        body: json.encode({
+          //'id': product.id,
+          'title': product.title,
+          'description': product.description,
+          'price': product.price,
+          'imageUrl': product.imageUrl,
+          'isFavorite': product.isFavorite,
+        }),
+      );
       final newProduct = Product(
           //id: DateTime.now().toString(),//вариант для создания уникального id
           id: json.decode(response.body)['name'],
@@ -96,16 +98,15 @@ class Products with ChangeNotifier {
       );
       //_items.insert(0,newProduct); //at the start of the list
       notifyListeners();
-    })
-
-        ///через catcherror отлавливаем возможные ошибки при добавлении продукта,
-        ///например если нет интерента и мы не можем достучаться до firebase
-        ///а потом мы кидаем эту ошибку (throw error;) в приложение для последующего вывода
-        ///в данном случае выведем его в edit_product_screen.dart
-        .catchError((error) {
+    } catch (error) {
+      ///через .catchError или try{} отлавливаем возможные ошибки при добавлении продукта,
+      ///лучше использовать try{} catch{} в async/await'е, чем пользовать .catchError()
+      ///например если нет интерента и мы не можем достучаться до firebase
+      ///а потом мы кидаем эту ошибку (throw error;) в приложение для последующего вывода
+      ///в данном случае выведем его в edit_product_screen.dart
       print(error);
       throw error;
-    });
+    }
   }
 
   void updateProduct(String id, Product newProduct) {

@@ -92,7 +92,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
     }
   }
 
-  void _saveForm() {
+  Future<void> _saveForm() async {
     ///запуск механизма валидации на форме. Если какой-то валидатор провалится, то в isValid попадет false
     final isValid = _form.currentState!.validate();
 
@@ -114,12 +114,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
       });
       Navigator.of(context).pop();
     } else {
-      Provider.of<Products>(context, listen: false).addProduct(_editedProduct)
-
-          ///тут мы ловим и обрабатываем ошибку, которую мы кидали из products.dart
-          .catchError((error) {
-        ///нам тут нужно сделать return потому как нужно вернуть результат Future с ошибкой
-        return showDialog<Null>(
+      ///тут мы ловим и обрабатываем ошибку, которую мы кидали из products.dart
+      try {
+        await Provider.of<Products>(context, listen: false)
+            .addProduct(_editedProduct);
+      } catch (error) {
+        await showDialog<Null>(
             context: context,
             builder: (ctx) => AlertDialog(
                   title: Text('Error occured!'),
@@ -132,12 +132,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
                         child: Text('OK'))
                   ],
                 ));
-      }).then((_) {
+      } finally {
         setState(() {
           _isLoading = false;
         });
         Navigator.of(context).pop();
-      });
+      }
     }
 
     //Navigator.of(context).pop();
