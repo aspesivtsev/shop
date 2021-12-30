@@ -67,11 +67,24 @@ class Products with ChangeNotifier {
   //   notifyListeners();
   // }
 
+  Future<void> fetchAndSetProducts() async {
+    //there are
+    //final url = Uri.parse('https://flutter-shop-test-app-default-rtdb.firebaseio.com/products.json');
+    final url = Uri.https(
+        'flutter-shop-test-app-default-rtdb.firebaseio.com', 'products.json');
+    try {
+      final response = await http.get(url);
+      print(json.decode(response.body));
+    } catch (error) {
+      throw (error);
+    }
+  }
+
   ///тут мы создаем Future вместо обычного void чтобы иметь возможность обращаться
   ///к возращаемому значению через .then()
   Future<void> addProduct(Product product) async {
     final url = Uri.https(
-        'flutter-shop-test-app-default-rtdb.firebaseio.com', 'products');
+        'flutter-shop-test-app-default-rtdb.firebaseio.com', 'products.json');
     try {
       final response = await http.post(
         url,

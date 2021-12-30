@@ -5,6 +5,7 @@ import '../widgets/badge.dart';
 import '../providers/cart.dart';
 import '../screens/cart_screen.dart';
 import '../widgets/app_drawer.dart';
+import '../providers/products.dart';
 
 enum FilterOptions { Favorites, All }
 
@@ -17,6 +18,41 @@ class ProductsOverviewScreen extends StatefulWidget {
 
 class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   var _showOnlyFavorites = false;
+  var _isInit = true;
+
+  ///@override
+  ///initState запускается один раз при старте виджета
+  ///получаем тут список продуктов
+
+  //void initState() {
+  ///1 вариант
+  ///Provider.of<Products>(context, listen: false).fetchAndSetProducts();
+  ///
+  ///super.initState();}
+
+  ///2 вариант это использовать didChangeDependencies вместо initState, как мы делали раньше
+  ///но didChangeDependencies запускается не 1 раз, как initState, а много раз, поэтому нужно делать дополнительный помощник
+  ///проводить проверку, чтобы инициализация прошла только 1 раз
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      Provider.of<Products>(context).fetchAndSetProducts();
+    }
+    _isInit = false;
+
+    super.didChangeDependencies();
+  }
+
+  /// 3 вариант использовать Future. мы используем его для того чтобы отложить его инициализацию
+  /// т.е. фактически инициализация происходит мгновенно, но она пройдет как бы на втором круге,
+  /// поэтому виджет уже будет проинициализирован и тогда все сработает
+  /*
+  @override
+  void initState() {
+    Future.delayed(Duration.zero)
+        .then((_) => {Provider.of<Products>(context).fetchAndSetProducts()});
+    super.initState();
+  }*/
 
   @override
   Widget build(BuildContext context) {

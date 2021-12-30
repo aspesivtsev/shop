@@ -13,10 +13,10 @@ import './providers/products.dart';
 import './providers/orders.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(ShopApp());
 }
 
-class MyApp extends StatelessWidget {
+class ShopApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
