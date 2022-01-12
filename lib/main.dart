@@ -47,9 +47,8 @@ class ShopApp extends StatelessWidget {
           title: 'Flutter Demo',
           theme: ThemeData(
             fontFamily: 'Lato',
-            colorScheme:
-                ColorScheme.fromSwatch(primarySwatch: Colors.lightGreen)
-                    .copyWith(secondary: Colors.deepOrange),
+            colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.green)
+                .copyWith(secondary: Colors.deepOrange),
           ),
           home: ProductsOverviewScreen(),
           routes: {

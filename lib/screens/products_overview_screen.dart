@@ -19,6 +19,7 @@ class ProductsOverviewScreen extends StatefulWidget {
 class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   var _showOnlyFavorites = false;
   var _isInit = true;
+  var _isLoading = false;
 
   ///@override
   ///initState запускается один раз при старте виджета
@@ -36,7 +37,18 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      Provider.of<Products>(context).fetchAndSetProducts();
+      //тут мы говорим что мы грузим что-то и соответственно пока _isLoading переменная будет являться true
+      //мы будем показывать спиннер, а после завершения вызова функции fetchAndSetProducts
+      //мы выключим спиннер
+      setState(() {
+        _isLoading = true;
+      });
+
+      Provider.of<Products>(context).fetchAndSetProducts().then((_) {
+        setState(() {
+          _isLoading = false;
+        });
+      });
     }
     _isInit = false;
 
@@ -59,6 +71,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
     //final productsContainer = Provider.of<Products>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Color(0xfff90034),
         title: Text('Shop'),
         actions: <Widget>[
           PopupMenuButton(
@@ -102,7 +115,9 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
         ],
       ),
       drawer: AppDrawer(),
-      body: ProductsGrid(_showOnlyFavorites),
+      body: _isLoading
+          ? Center(child: CircularProgressIndicator())
+          : ProductsGrid(_showOnlyFavorites),
     );
   }
 }
