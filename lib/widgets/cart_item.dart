@@ -35,7 +35,7 @@ class CartItem extends StatelessWidget {
             actions: [
               TextButton(
                   onPressed: () {
-                    ///передаем из модального окна значение true, что значит ничего не делать
+                    ///передаем из модального окна значение false, что значит ничего не делать
                     Navigator.of(ctx).pop(false);
                   },
                   child: Text('No')),

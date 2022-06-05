@@ -107,11 +107,9 @@ class _EditProductScreenState extends State<EditProductScreen> {
     });
 
     if (_editedProduct.id != 'newProduct') {
-      Provider.of<Products>(context, listen: false)
+      await Provider.of<Products>(context, listen: false)
           .updateProduct(_editedProduct.id, _editedProduct);
-      setState(() {
-        _isLoading = false;
-      });
+
       Navigator.of(context).pop();
     } else {
       ///тут мы ловим и обрабатываем ошибку, которую мы кидали из products.dart
@@ -132,15 +130,18 @@ class _EditProductScreenState extends State<EditProductScreen> {
                         child: Text('OK'))
                   ],
                 ));
-      } finally {
+      }
+      /*finally {
         setState(() {
           _isLoading = false;
         });
         Navigator.of(context).pop();
-      }
+      }*/
     }
-
-    //Navigator.of(context).pop();
+    setState(() {
+      _isLoading = false;
+    });
+    Navigator.of(context).pop();
 
     print(_editedProduct.id);
     print(_editedProduct.title);
